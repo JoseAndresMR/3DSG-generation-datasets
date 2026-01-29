@@ -1,1 +1,10 @@
 3DSG-Generation-Datasets_NetworkX.zip filter=lfs diff=lfs merge=lfs -text
+datasets/M/M-B.zip filter=lfs diff=lfs merge=lfs -text
+datasets/M/M-C.zip filter=lfs diff=lfs merge=lfs -text
+datasets/M/M-F.zip filter=lfs diff=lfs merge=lfs -text
+datasets/R/R-B.zip filter=lfs diff=lfs merge=lfs -text
+datasets/R/R-F.zip filter=lfs diff=lfs merge=lfs -text
+datasets/S/S-C.zip filter=lfs diff=lfs merge=lfs -text
+datasets/S/S-F-square.zip filter=lfs diff=lfs merge=lfs -text
+datasets/S/S-F.zip filter=lfs diff=lfs merge=lfs -text
+datasets/R/R-C.zip filter=lfs diff=lfs merge=lfs -text
