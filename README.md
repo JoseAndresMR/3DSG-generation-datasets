@@ -2,7 +2,7 @@
 
 This repository contains a suite of 3D Scene Graph (3DSG) datasets designed for graph generation conditioned on plane information. These datasets facilitate research into graph generation techniques and are structured with incremental complexity through multiple hierarchy levels, from walls and rooms to buildings and cities.
 
-![Overview](paper_images/front.png)
+<img src="paper_images/front.png" alt="Overview" width="600">
 
 The datasets are divided into three sources: Synthetic data (S), MSD public dataset (M), and real LIDAR data (R). Each dataset is available in different hierarchy levels, with corresponding naming conventions to indicate the depth of the hierarchy.
 
