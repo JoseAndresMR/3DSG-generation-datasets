@@ -7,7 +7,30 @@ import numpy as np
 # Get the benchmark root directory (parent of this script's parent)
 BENCHMARK_DIR = Path(__file__).parent.parent / "benchmarks"
 
-method_order = ["Rand", "EC-square", "EC-L", "Ours", "GT"]
+method_order = ["Rand", "EC-square", "EC-L", "Ours", "GT-test","Planes"]
+
+# Map raw folder names to the display/canonical method names used in plots and ordering.
+# Keys are matched case-insensitively.
+method_name_map = {
+    "rand": "Rand",
+    "ifh": "Ours",
+    "GT-test": "GT-Test",
+    "Planes": "Planes",
+    "EC-square": "EC-square",
+    "EC-L": "EC-L"
+}
+
+
+def get_mapped_method_name(method):
+    """Map a raw method/folder name to a display/canonical method name."""
+    return method_name_map.get(method.lower(), method)
+
+
+def get_method_sort_key(method):
+    """Sort by method_order using mapped method names; unknown names go last."""
+    method_order_lower = {m.lower(): i for i, m in enumerate(method_order)}
+    mapped_name = get_mapped_method_name(method)
+    return method_order_lower.get(mapped_name.lower(), len(method_order))
 
 
 def get_available_methods():
@@ -51,13 +74,7 @@ def get_methods_for_subdataset(subdataset):
                         break
     
     # Sort by method_order, with unlisted methods at the end
-    def sort_key(method):
-        try:
-            return method_order.index(method)
-        except ValueError:
-            return len(method_order)
-    
-    return sorted(methods_with_subdataset, key=sort_key)
+    return sorted(methods_with_subdataset, key=get_method_sort_key)
 
 
 def count_available_examples(method, subdataset):
@@ -132,7 +149,10 @@ def compare_methods_on_subdataset(subdataset, methods=None,
         (fig, ax) matplotlib figure and axes objects
     """
     if methods is None:
-        methods = get_available_methods()
+        methods = get_methods_for_subdataset(subdataset)
+    else:
+        # If methods are provided, still sort by method_order.
+        methods = sorted(methods, key=get_method_sort_key)
     
     # Determine the actual number of examples by checking the first method
     num_examples = 0
@@ -184,8 +204,9 @@ def compare_methods_on_subdataset(subdataset, methods=None,
             ax.set_xticks([])
             ax.set_yticks([])
         
-        # Add row labels (method names) on left side
-        axes[row_idx, 0].set_ylabel(method, fontsize=11, fontweight='bold', 
+        # Add row labels (mapped/display method names) on left side
+        display_method = get_mapped_method_name(method)
+        axes[row_idx, 0].set_ylabel(display_method, fontsize=11, fontweight='bold', 
                                    labelpad=10)
     
     # Add "examples" label at the bottom center spanning all columns
@@ -273,13 +294,13 @@ def compare_subdatasets_across_methods(subdatasets, method, num_examples=5,
     return fig, axes
 
 
-def sweep_and_generate_comparisons(output_dir="comparison_images"):
+def sweep_and_generate_comparisons(output_dir="qualitative_results"):
     """
     Sweep through all subdatasets in the benchmarks folder and create 
     comparison plots for each subdataset across all methods that contain it.
     
     Args:
-        output_dir: Output directory at the same level as benchmarks (default: 'comparison_images')
+        output_dir: Output directory at the same level as benchmarks (default: 'qualitative_results')
     """
     output_path = BENCHMARK_DIR.parent / output_dir
     output_path.mkdir(parents=True, exist_ok=True)
@@ -324,4 +345,4 @@ if __name__ == "__main__":
     print()
     
     # Sweep and generate all comparisons
-    sweep_and_generate_comparisons(output_dir="comparison_images")
+    sweep_and_generate_comparisons(output_dir="qualitative_results")
